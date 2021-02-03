@@ -1,6 +1,7 @@
 let timer = null
 
 function fetchCurrency(milisec, data) {
+  chrome.browserAction.setBadgeText({ text: "load" });
   timer = setInterval(function () {
     fetch("https://api.nobitex.ir/market/stats", {
       method: "POST",
@@ -12,7 +13,7 @@ function fetchCurrency(milisec, data) {
         const result = (
           // convert rial to toman
           json.stats[`${data.srcCurrency}-rls`].latest / 10
-        ).toLocaleString();
+        ).toLocaleString().substr(-5);
         chrome.browserAction.setBadgeText({ text: result });
       })
       .catch((err) => alert(err));
