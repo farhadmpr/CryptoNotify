@@ -9,10 +9,24 @@ function btnStartClick() {
   };
 
   chrome.extension.getBackgroundPage().fetchCurrency(3000, _data);
+
+  chrome.extension.getBackgroundPage().notify({
+    title: "Start",
+    message: "Fetch started successfully!",
+    iconUrl: "/icon.png",
+    type: "basic",
+  });
+
 }
 
-function btnStopClick(){    
-    chrome.extension.getBackgroundPage().stopFetch()
+function btnStopClick() {
+  chrome.extension.getBackgroundPage().stopFetch();
+  chrome.extension.getBackgroundPage().notify({
+    title: "Stop",
+    message: "Fetch stoped successfully!",
+    iconUrl: "/icon.png",
+    type: "basic",
+  });
 }
 
 btnStart.addEventListener("click", btnStartClick);
