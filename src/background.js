@@ -1,4 +1,4 @@
-let timer = null
+let timer = null;
 
 function fetchCurrency(milisec, data) {
   chrome.browserAction.setBadgeText({ text: "load" });
@@ -10,17 +10,20 @@ function fetchCurrency(milisec, data) {
     })
       .then((response) => response.json())
       .then((json) => {
-        const result = (
-          // convert rial to toman
-          json.stats[`${data.srcCurrency}-rls`].latest / 10
-        ).toLocaleString().substr(-5);
+        const result = // convert rial to toman
+        (json.stats[`${data.srcCurrency}-rls`].latest / 10)
+          .toLocaleString()
+          .substr(-5);
         chrome.browserAction.setBadgeText({ text: result });
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        console.log(err);
+        chrome.browserAction.setBadgeText({ text: 'error' });        
+      });
   }, milisec);
 }
 
-function stopFetch(){
-    clearInterval(timer)
-    chrome.browserAction.setBadgeText({ text: "" });
+function stopFetch() {
+  clearInterval(timer);
+  chrome.browserAction.setBadgeText({ text: "" });
 }
