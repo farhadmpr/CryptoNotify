@@ -1,6 +1,6 @@
 let timer = null;
 let lastPrice = 0;
-const priceChangeOffset = 100;
+const priceChangeOffset = 1000;
 
 function fetchCurrency(milisec, data) {
   chrome.browserAction.setBadgeText({ text: "load" });
@@ -18,12 +18,12 @@ function fetchCurrency(milisec, data) {
             `${data.srcCurrency}-rls`].latest / 10
         )
 
-        // show last 5 chars of price
-        chrome.browserAction.setBadgeText({ text: result.toLocaleString().substr(-5) });
+        // show first 5 chars of price
+        chrome.browserAction.setBadgeText({ text: result.toLocaleString().substr(5) });
 
         if (result > lastPrice + priceChangeOffset) {
           notify({
-            title: "Price +",
+            title: `${data.srcCurrency} ▲`,
             message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${result-lastPrice})`,
             iconUrl: "/icon.png",
             type: "basic",
@@ -32,7 +32,7 @@ function fetchCurrency(milisec, data) {
 
         if (result < lastPrice - priceChangeOffset) {
           notify({
-            title: "Price -",
+            title: `${data.srcCurrency} ▼`,
             message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (${result-lastPrice})`,
             iconUrl: "/icon.png",
             type: "basic",
