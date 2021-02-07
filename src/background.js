@@ -1,6 +1,6 @@
 var timer = null
 let lastPrice = 0;
-const priceChangeOffset = 1000;
+var priceChangeOffset = 1000;
 
 function fetchCurrency(milisec, data) {
   chrome.browserAction.setBadgeText({ text: "load" });
@@ -24,7 +24,7 @@ function fetchCurrency(milisec, data) {
         if (result > lastPrice + priceChangeOffset) {
           let increasePercent = (result - lastPrice) / result * 100
           notify({
-            title: `${data.srcCurrency} ▲`,
+            title: `${data.srcCurrency.toUpperCase()} ▲`,
             message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${increasePercent.toLocaleString()}%)`,
             iconUrl: "/icon.png",
             type: "basic",
@@ -34,7 +34,7 @@ function fetchCurrency(milisec, data) {
         if (result < lastPrice - priceChangeOffset) {
           let decreasePercent = (lastPrice - result) / result * 100
           notify({
-            title: `${data.srcCurrency} ▼`,
+            title: `${data.srcCurrency.toUpperCase()} ▼`,
             message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (${decreasePercent.toLocaleString()}%)`,
             iconUrl: "/icon.png",
             type: "basic",
@@ -52,6 +52,7 @@ function fetchCurrency(milisec, data) {
 
 function stopFetch() {
   clearInterval(timer);
+  timer = null
   chrome.browserAction.setBadgeText({ text: "" });
 }
 

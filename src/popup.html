@@ -9,22 +9,31 @@
 
 <body style="min-width: 250px;">
     <form>
-        <label for="selectCurrency">Select crypto: </label>
-        <select name="selectCurrency" id="selectCurrency">
-            <option value=""></option>
-            <option value="btc">BTC</option>
-            <option value="eth">ETH</option>
-            <option value="xrp">XRP</option>
-            <option value="usdt">USDT</option>
-            <option value="bch">BCH</option>
-            <option value="ltc">LTC</option>
-            <option value="bnb">BNB</option>
-            <option value="eos">EOS</option>
-            <option value="xlm">XLM</option>
-            <option value="trx">TRX</option>
-            <option value="etc">ETC</option>
-            <option value="doge">DOGE</option>
-        </select>
+        <div>
+            <label for="selectCurrency">Select crypto: </label>
+            <select name="selectCurrency" id="selectCurrency">
+                <option value=""></option>
+                <option value="btc">BTC</option>
+                <option value="eth">ETH</option>
+                <option value="xrp">XRP</option>
+                <option value="usdt">USDT</option>
+                <option value="bch">BCH</option>
+                <option value="ltc">LTC</option>
+                <option value="bnb">BNB</option>
+                <option value="eos">EOS</option>
+                <option value="xlm">XLM</option>
+                <option value="trx">TRX</option>
+                <option value="etc">ETC</option>
+                <option value="doge">DOGE</option>
+            </select>
+        </div>
+        <hr>
+        <div>
+            <label for="txtPriceOffset">Price offset for notify: </label>
+            <input type="number" name="txtPriceOffset" id="txtPriceOffset">
+            <span> Toman</span>
+        </div>
+        <hr>
         <input type="button" value="start" id="btnStart">
         <input type="button" value="stop" id="btnStop">
     </form>
