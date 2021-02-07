@@ -11,5 +11,5 @@
     "default_title": "CryptoNotify",
     "default_popup": "popup.html"
   },
-  "permissions": ["notifications"]
+  "permissions": ["notifications", "storage"]
 }

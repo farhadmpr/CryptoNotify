@@ -1,4 +1,4 @@
-let timer = null;
+var timer = null
 let lastPrice = 0;
 const priceChangeOffset = 1000;
 

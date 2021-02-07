@@ -1,15 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Notify</title>
 </head>
-<body>
-    <input type="text" name="txtCurrency" id="txtCurrency" value="xrp">
-    <input type="button" value="start" id="btnStart">
-    <input type="button" value="stop" id="btnStop">
 
+<body style="min-width: 250px;">
+    <form>
+        <label for="selectCurrency">Select crypto: </label>
+        <select name="selectCurrency" id="selectCurrency">
+            <option value=""></option>
+            <option value="btc">BTC</option>
+            <option value="eth">ETH</option>
+            <option value="xrp">XRP</option>
+            <option value="usdt">USDT</option>
+            <option value="bch">BCH</option>
+            <option value="ltc">LTC</option>
+            <option value="bnb">BNB</option>
+            <option value="eos">EOS</option>
+            <option value="xlm">XLM</option>
+            <option value="trx">TRX</option>
+            <option value="etc">ETC</option>
+            <option value="doge">DOGE</option>
+        </select>
+        <input type="button" value="start" id="btnStart">
+        <input type="button" value="stop" id="btnStop">
+    </form>
     <script src="popup.js"></script>
 </body>
+
 </html>
