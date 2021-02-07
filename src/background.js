@@ -18,8 +18,8 @@ function fetchCurrency(milisec, data) {
             `${data.srcCurrency}-rls`].latest / 10
         )
 
-        // show first 5 chars of price
-        chrome.browserAction.setBadgeText({ text: result.toLocaleString().substr(5) });
+        // show first 4 chars of price
+        chrome.browserAction.setBadgeText({ text: result.toString().substr(0,4) });
 
         if (result > lastPrice + priceChangeOffset) {
           notify({
