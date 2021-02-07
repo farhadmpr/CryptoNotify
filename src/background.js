@@ -22,18 +22,20 @@ function fetchCurrency(milisec, data) {
         chrome.browserAction.setBadgeText({ text: result.toString().substr(0,4) });
 
         if (result > lastPrice + priceChangeOffset) {
+          let increasePercent = (result - lastPrice) / result * 100
           notify({
             title: `${data.srcCurrency} ▲`,
-            message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${result-lastPrice})`,
+            message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${increasePercent.toLocaleString()}%)`,
             iconUrl: "/icon.png",
             type: "basic",
           });
         }
 
         if (result < lastPrice - priceChangeOffset) {
+          let decreasePercent = (lastPrice - result) / result * 100
           notify({
             title: `${data.srcCurrency} ▼`,
-            message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (${result-lastPrice})`,
+            message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (${decreasePercent.toLocaleString()}%)`,
             iconUrl: "/icon.png",
             type: "basic",
           });
