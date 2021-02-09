@@ -71,7 +71,7 @@ function showResult() {
             <td>${(json.stats[crypto].bestSell / 10).toLocaleString()}</td>
             <td>${(json.stats[crypto].bestBuy / 10).toLocaleString()}</td>
             <td class=${
-              json.stats[crypto].dayChange > 0 ? "text-success" : "text-danger"
+              json.stats[crypto].dayChange >= 0 ? "text-success" : "text-danger"
             }>${json.stats[crypto].dayChange.toLocaleString()}%</td>
           `;
         resultBody.appendChild(tr);
