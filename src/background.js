@@ -1,4 +1,5 @@
-var timer = null
+var timer = null;
+var notifyEnabled = false;
 let lastPrice = 0;
 var priceChangeOffset = 1000;
 
@@ -13,33 +14,36 @@ function fetchCurrency(milisec, data) {
     })
       .then((response) => response.json())
       .then((json) => {
-        const result = (
+        const result =
           json.stats[ // convert rial to toman
-            `${data.srcCurrency}-rls`].latest / 10
-        )
+            `${data.srcCurrency}-rls`].latest / 10;
 
         // show first 4 chars of price
-        chrome.browserAction.setBadgeText({ text: result.toString().substr(0,4) });
+        chrome.browserAction.setBadgeText({
+          text: result.toString().substr(0, 4),
+        });
 
-        if (result > lastPrice + priceChangeOffset) {
-          let increasePercent = (result - lastPrice) / result * 100
-          notify({
-            title: `${data.srcCurrency.toUpperCase()} ▲`,
-            message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${increasePercent.toLocaleString()}%)`,
-            iconUrl: "/icon.png",
-            type: "basic",
-          });
+        if (notifyEnabled) {
+          if (result > lastPrice + priceChangeOffset) {
+            let increasePercent = ((result - lastPrice) / result) * 100;
+            notify({
+              title: `${data.srcCurrency.toUpperCase()} ▲`,
+              message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${increasePercent.toLocaleString()}%)`,
+              iconUrl: "/icon.png",
+              type: "basic",
+            });
+          }
+
+          if (result < lastPrice - priceChangeOffset) {
+            let decreasePercent = ((lastPrice - result) / result) * 100;
+            notify({
+              title: `${data.srcCurrency.toUpperCase()} ▼`,
+              message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (-${decreasePercent.toLocaleString()}%)`,
+              iconUrl: "/icon.png",
+              type: "basic",
+            });
+          }
         }
-
-        if (result < lastPrice - priceChangeOffset) {
-          let decreasePercent = (lastPrice - result) / result * 100
-          notify({
-            title: `${data.srcCurrency.toUpperCase()} ▼`,
-            message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (${decreasePercent.toLocaleString()}%)`,
-            iconUrl: "/icon.png",
-            type: "basic",
-          });
-        }        
 
         lastPrice = result;
       })
@@ -52,7 +56,7 @@ function fetchCurrency(milisec, data) {
 
 function stopFetch() {
   clearInterval(timer);
-  timer = null
+  timer = null;
   chrome.browserAction.setBadgeText({ text: "" });
 }
 

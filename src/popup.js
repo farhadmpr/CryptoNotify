@@ -2,6 +2,8 @@ const btnStart = document.getElementById("btnStart");
 const btnStop = document.getElementById("btnStop");
 const selectCurrency = document.getElementById("selectCurrency");
 const txtPriceOffset = document.getElementById("txtPriceOffset");
+const notifyEnabled = document.getElementById("notifyEnabled");
+const timerInterval = 3000;
 
 function btnStartClick() {
   if (!selectCurrency.value) return;
@@ -13,7 +15,7 @@ function btnStartClick() {
     dstCurrency: "rls",
   };
 
-  chrome.extension.getBackgroundPage().fetchCurrency(3000, _data);
+  chrome.extension.getBackgroundPage().fetchCurrency(timerInterval, _data);
 
   chrome.extension.getBackgroundPage().notify({
     title: `Start ${selectCurrency.value.toUpperCase()}`,
@@ -41,13 +43,19 @@ function txtPriceOffsetChange() {
   chrome.extension.getBackgroundPage().priceChangeOffset = txtPriceOffset.value;
 }
 
+function notifyEnabledChange(event) {
+  chrome.extension.getBackgroundPage().notifyEnabled = event.target.checked;
+}
+
 btnStart.addEventListener("click", btnStartClick);
 btnStop.addEventListener("click", btnStopClick);
 selectCurrency.addEventListener("change", selectCurrencyChange);
 txtPriceOffset.addEventListener("change", txtPriceOffsetChange);
+notifyEnabled.addEventListener("change", notifyEnabledChange);
 
 chrome.storage.local.get(["currency"], function (result) {
   selectCurrency.value = result.currency;
 });
 
 txtPriceOffset.value = chrome.extension.getBackgroundPage().priceChangeOffset;
+notifyEnabled.checked = chrome.extension.getBackgroundPage().notifyEnabled;
