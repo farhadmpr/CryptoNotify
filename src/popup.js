@@ -3,6 +3,7 @@ const btnStop = document.getElementById("btnStop");
 const selectCurrency = document.getElementById("selectCurrency");
 const txtPriceOffset = document.getElementById("txtPriceOffset");
 const notifyEnabled = document.getElementById("notifyEnabled");
+const resultBody = document.getElementById("resultBody");
 const timerInterval = 3000;
 
 function btnStartClick() {
@@ -47,6 +48,38 @@ function notifyEnabledChange(event) {
   chrome.extension.getBackgroundPage().notifyEnabled = event.target.checked;
 }
 
+function showResult() {
+  const _data = {
+    srcCurrency: "btc,eth,ltc,xrp,bch,bnb,eos,xlm,etc,trx,doge",
+    dstCurrency: "rls",
+  };
+
+  resultBody.innerHTML = "";
+
+  fetch("https://api.nobitex.ir/market/stats", {
+    method: "POST",
+    body: JSON.stringify(_data),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      for (const crypto in json.stats) {
+        let tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${crypto}</td>
+            <td>${(json.stats[crypto].latest/10).toLocaleString()}</td>
+            <td>${(json.stats[crypto].bestSell/10).toLocaleString()}</td>
+            <td>${(json.stats[crypto].bestBuy/10).toLocaleString()}</td>
+            <td>${(json.stats[crypto].dayChange/10).toLocaleString()}</td>
+          `;
+        resultBody.appendChild(tr);
+      }
+    })
+    .catch((err) => {
+      chrome.extension.getBackgroundPage().console.log(err);
+    });
+}
+
 btnStart.addEventListener("click", btnStartClick);
 btnStop.addEventListener("click", btnStopClick);
 selectCurrency.addEventListener("change", selectCurrencyChange);
@@ -59,3 +92,5 @@ chrome.storage.local.get(["currency"], function (result) {
 
 txtPriceOffset.value = chrome.extension.getBackgroundPage().priceChangeOffset;
 notifyEnabled.checked = chrome.extension.getBackgroundPage().notifyEnabled;
+
+showResult();

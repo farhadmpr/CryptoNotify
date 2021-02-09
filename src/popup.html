@@ -7,7 +7,7 @@
     <title>Crypto Notify</title>
 </head>
 
-<body style="min-width: 250px;">
+<body style="min-width: 550px;">
     <form>
         <div>
             <label for="selectCurrency">Select crypto: </label>
@@ -44,6 +44,23 @@
             <input type="button" value="stop" id="btnStop">
         </div>
     </form>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ارز</th>
+                    <th>آخرین</th>
+                    <th>بهترین فروش</th>
+                    <th>بهترین خرید</th>
+                    <th>تغییرات روز</th>                    
+                </tr>
+            </thead>
+            <tbody id="resultBody">
+            </tbody>
+        </table>
+    </div>
+
     <script src="popup.js"></script>
 </body>
 
