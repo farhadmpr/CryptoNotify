@@ -66,11 +66,13 @@ function showResult() {
       for (const crypto in json.stats) {
         let tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>${crypto}</td>
-            <td>${(json.stats[crypto].latest/10).toLocaleString()}</td>
-            <td>${(json.stats[crypto].bestSell/10).toLocaleString()}</td>
-            <td>${(json.stats[crypto].bestBuy/10).toLocaleString()}</td>
-            <td>${(json.stats[crypto].dayChange/10).toLocaleString()}</td>
+            <td>${crypto.split("-")[0].toUpperCase()}</td>
+            <td>${(json.stats[crypto].latest / 10).toLocaleString()}</td>
+            <td>${(json.stats[crypto].bestSell / 10).toLocaleString()}</td>
+            <td>${(json.stats[crypto].bestBuy / 10).toLocaleString()}</td>
+            <td class=${
+              json.stats[crypto].dayChange > 0 ? "text-success" : "text-danger"
+            }>${json.stats[crypto].dayChange.toLocaleString()}%</td>
           `;
         resultBody.appendChild(tr);
       }

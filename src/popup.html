@@ -4,63 +4,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <title>Crypto Notify</title>
 </head>
 
-<body style="min-width: 550px;">
-    <form>
-        <div>
-            <label for="selectCurrency">Select crypto: </label>
-            <select name="selectCurrency" id="selectCurrency">
-                <option value=""></option>
-                <option value="btc">BTC</option>
-                <option value="eth">ETH</option>
-                <option value="xrp">XRP</option>
-                <option value="usdt">USDT</option>
-                <option value="bch">BCH</option>
-                <option value="ltc">LTC</option>
-                <option value="bnb">BNB</option>
-                <option value="eos">EOS</option>
-                <option value="xlm">XLM</option>
-                <option value="trx">TRX</option>
-                <option value="etc">ETC</option>
-                <option value="doge">DOGE</option>
-            </select>
-        </div>
-        <hr>
-        <div>
-            <input type="checkbox" name="notifyEnabled" id="notifyEnabled">
-            <label for="notifyEnabled">Enable notification</label>
-        </div>
-        <hr>
-        <div>
-            <label for="txtPriceOffset">Price offset for notify: </label>
-            <input type="number" name="txtPriceOffset" id="txtPriceOffset">
-            <span> Toman</span>
-        </div>
-        <hr>
-        <div>
-            <input type="button" value="start" id="btnStart">
-            <input type="button" value="stop" id="btnStop">
-        </div>
-    </form>
+<body>
+    <div class="container">
+        <div class="row my-3">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        Settings
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="selectCurrency">Select crypto: </label>
+                            <select class="form-select" name="selectCurrency" id="selectCurrency">
+                                <option value=""></option>
+                                <option value="btc">BTC</option>
+                                <option value="eth">ETH</option>
+                                <option value="xrp">XRP</option>
+                                <option value="usdt">USDT</option>
+                                <option value="bch">BCH</option>
+                                <option value="ltc">LTC</option>
+                                <option value="bnb">BNB</option>
+                                <option value="eos">EOS</option>
+                                <option value="xlm">XLM</option>
+                                <option value="trx">TRX</option>
+                                <option value="etc">ETC</option>
+                                <option value="doge">DOGE</option>
+                            </select>
+                        </div>
 
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>ارز</th>
-                    <th>آخرین</th>
-                    <th>بهترین فروش</th>
-                    <th>بهترین خرید</th>
-                    <th>تغییرات روز</th>                    
-                </tr>
-            </thead>
-            <tbody id="resultBody">
-            </tbody>
-        </table>
+                        <div class="mb-3">
+                            <input class="form-check-input" type="checkbox" name="notifyEnabled" id="notifyEnabled">
+                            <label class="form-label" for="notifyEnabled">Enable notification</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="txtPriceOffset">Price offset for notify: </label>
+                            <input class="form-control" type="number" name="txtPriceOffset" id="txtPriceOffset">
+                            <span> Toman</span>
+                        </div>
+
+                        <input class="btn btn-primary mb-3" type="button" value="start" id="btnStart">
+                        <input class="btn btn-primary mb-3" type="button" value="stop" id="btnStop">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        Price
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ارز</th>
+                                    <th>آخرین</th>
+                                    <th>بهترین فروش</th>
+                                    <th>بهترین خرید</th>
+                                    <th>تغییرات روز</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
     <script src="popup.js"></script>
 </body>
 
