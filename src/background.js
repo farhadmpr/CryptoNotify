@@ -1,7 +1,10 @@
 var timer = null;
-var notifyEnabled = false;
+var notifyPriceOffset = false;
+var notifyTargetPrice = false;
 let lastPrice = 0;
 var priceChangeOffset = 1000;
+var priceTarget = 0;
+var priceTargetType = "";
 
 function fetchCurrency(milisec, data) {
   chrome.browserAction.setBadgeText({ text: "load" });
@@ -23,7 +26,7 @@ function fetchCurrency(milisec, data) {
           text: result.toString().substr(0, 4),
         });
 
-        if (notifyEnabled) {
+        if (notifyPriceOffset) {
           if (result > lastPrice + priceChangeOffset) {
             let increasePercent = ((result - lastPrice) / result) * 100;
             notify({
@@ -42,6 +45,28 @@ function fetchCurrency(milisec, data) {
               iconUrl: "/icon.png",
               type: "basic",
             });
+          }
+        }
+
+        if (notifyTargetPrice) {
+          if (priceTargetType === "bigger" && result >= priceTarget) {
+            notify({
+              title: `${data.srcCurrency.toUpperCase()} Target >= ${priceTarget.toLocaleString()}`,
+              message: `${result.toLocaleString()}`,
+              iconUrl: "/icon.png",
+              type: "basic",
+            });
+            priceTargetType = "";
+          }
+
+          if (priceTargetType === "lower" && result <= priceTarget) {
+            notify({
+              title: `${data.srcCurrency.toUpperCase()} Target <= ${priceTarget.toLocaleString()}`,
+              message: `${result.toLocaleString()}`,
+              iconUrl: "/icon.png",
+              type: "basic",
+            });
+            priceTargetType = "";
           }
         }
 

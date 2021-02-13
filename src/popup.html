@@ -40,14 +40,45 @@
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <input class="form-check-input" type="checkbox" name="notifyEnabled" id="notifyEnabled">
-                            <label class="form-label" for="notifyEnabled">آگاه سازی تغییر قیمت</label>
+                        <div class="my-4">
+                            <div>
+                                <input class="form-check-input" type="checkbox" name="notifyPriceOffset"
+                                    id="notifyPriceOffset">
+                                <label class="form-label" for="notifyPriceOffset">آگاه سازی تغییر قیمت</label>
+                            </div>
+
+                            <div>
+                                <label class="form-label" for="txtPriceOffset">میزان تغییر قیمت برای آگاه سازی به
+                                    تومان</label>
+                                <input class="form-control" type="number" name="txtPriceOffset" id="txtPriceOffset">
+                            </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label" for="txtPriceOffset">میزان تغییر قیمت برای آگاه سازی به تومان</label>
-                            <input class="form-control" type="number" name="txtPriceOffset" id="txtPriceOffset">
+                        <div class="my-4">
+                            <div>
+                                <input class="form-check-input" type="checkbox" name="notifyTargetPrice"
+                                    id="notifyTargetPrice">
+                                <label class="form-label" for="notifyTargetPrice">آگاه سازی رسیدن به قیمت</label>
+                            </div>
+
+                            <div>
+                                <label class="form-label" for="txtTargetPrice">قیمت مد نظر برای آگاه سازی به
+                                    تومان</label>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <select class="form-select" name="selectTargetPriceType"
+                                            id="selectTargetPriceType">
+                                            <option value=""></option>
+                                            <option value="bigger">بزرگتر از</option>
+                                            <option value="lower">کوچکتر از</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-8">
+                                        <input class="form-control" type="number" name="txtTargetPrice"
+                                            id="txtTargetPrice">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <input class="btn btn-success mb-3" type="button" value="شروع کن" id="btnStart">
