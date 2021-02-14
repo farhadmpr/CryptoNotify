@@ -3,11 +3,11 @@ Simple chrome extension to show real-time crypto price in badge and notify.
 
 This extension configured to the Nobitex.ir cryptocurrency exchange market API.
 
-![demo1](https://github.com/farhadmpr/CryptoNotify/demo/Screen1.png)
+![demo1](https://raw.githubusercontent.com/farhadmpr/CryptoNotify/main/demo/Screen1.png)
 
-![demo2](https://github.com/farhadmpr/CryptoNotify/demo/Screen2.png)
+![demo2](https://raw.githubusercontent.com/farhadmpr/CryptoNotify/main/demo/Screen3.png)
 
-![demo3](https://github.com/farhadmpr/CryptoNotify/demo/Screen3.png)
+![demo3](https://raw.githubusercontent.com/farhadmpr/CryptoNotify/main/demo/Screen2.png)
 
 ------------
 ## TODO list
