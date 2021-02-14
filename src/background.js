@@ -5,6 +5,7 @@ let lastPrice = 0;
 var priceChangeOffset = 1000;
 var priceTarget = 0;
 var priceTargetType = "";
+let notificationSound = new Audio("./sounds/notification.mp3");
 
 function fetchCurrency(milisec, data) {
   chrome.browserAction.setBadgeText({ text: "load" });
@@ -56,6 +57,7 @@ function fetchCurrency(milisec, data) {
               iconUrl: "/icon.png",
               type: "basic",
             });
+            notificationSound.play();
             priceTargetType = "";
           }
 
@@ -66,6 +68,7 @@ function fetchCurrency(milisec, data) {
               iconUrl: "/icon.png",
               type: "basic",
             });
+            notificationSound.play();
             priceTargetType = "";
           }
         }
