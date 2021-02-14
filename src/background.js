@@ -33,7 +33,7 @@ function fetchCurrency(milisec, data) {
             notify({
               title: `${data.srcCurrency.toUpperCase()} ▲`,
               message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${increasePercent.toLocaleString()}%)`,
-              iconUrl: "/icon.png",
+              iconUrl: "./icons/icon32.png",
               type: "basic",
             });
           }
@@ -43,7 +43,7 @@ function fetchCurrency(milisec, data) {
             notify({
               title: `${data.srcCurrency.toUpperCase()} ▼`,
               message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (-${decreasePercent.toLocaleString()}%)`,
-              iconUrl: "/icon.png",
+              iconUrl: "./icons/icon32.png",
               type: "basic",
             });
           }
@@ -54,7 +54,7 @@ function fetchCurrency(milisec, data) {
             notify({
               title: `${data.srcCurrency.toUpperCase()} Target >= ${priceTarget.toLocaleString()}`,
               message: `${result.toLocaleString()}`,
-              iconUrl: "/icon.png",
+              iconUrl: "./icons/icon32.png",
               type: "basic",
             });
             notificationSound.play();
@@ -65,7 +65,7 @@ function fetchCurrency(milisec, data) {
             notify({
               title: `${data.srcCurrency.toUpperCase()} Target <= ${priceTarget.toLocaleString()}`,
               message: `${result.toLocaleString()}`,
-              iconUrl: "/icon.png",
+              iconUrl: "./icons/icon32.png",
               type: "basic",
             });
             notificationSound.play();

@@ -24,7 +24,7 @@ function btnStartClick(event) {
   chrome.extension.getBackgroundPage().notify({
     title: `Start ${selectCurrency.value.toUpperCase()}`,
     message: "Fetch started successfully!",
-    iconUrl: "/icon.png",
+    iconUrl: "./icons/icon32.png",
     type: "basic",
   });
 
@@ -38,7 +38,7 @@ function btnStopClick(event) {
   chrome.extension.getBackgroundPage().notify({
     title: `Stop ${selectCurrency.value.toUpperCase()}`,
     message: "Fetch stoped successfully!",
-    iconUrl: "/icon.png",
+    iconUrl: "./icons/icon32.png",
     type: "basic",
   });
 
