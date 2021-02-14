@@ -9,7 +9,7 @@ const resultBody = document.getElementById("resultBody");
 const selectTargetPriceType = document.getElementById("selectTargetPriceType");
 const timerInterval = 3000;
 
-function btnStartClick() {
+function btnStartClick(event) {
   if (!selectCurrency.value) return;
 
   if (chrome.extension.getBackgroundPage().timer) return;
@@ -27,9 +27,13 @@ function btnStartClick() {
     iconUrl: "/icon.png",
     type: "basic",
   });
+
+  event.target.disabled = true;
+  btnStop.disabled = false;
+  selectCurrency.disabled = true;
 }
 
-function btnStopClick() {
+function btnStopClick(event) {
   chrome.extension.getBackgroundPage().stopFetch();
   chrome.extension.getBackgroundPage().notify({
     title: `Stop ${selectCurrency.value.toUpperCase()}`,
@@ -37,6 +41,10 @@ function btnStopClick() {
     iconUrl: "/icon.png",
     type: "basic",
   });
+
+  event.target.disabled = true;
+  btnStart.disabled = false;
+  selectCurrency.disabled = false;
 }
 
 function selectCurrencyChange() {
@@ -119,6 +127,10 @@ notifyPriceOffset.checked = chrome.extension.getBackgroundPage().notifyPriceOffs
 txtTargetPrice.value = chrome.extension.getBackgroundPage().priceTarget;
 notifyTargetPrice.checked = chrome.extension.getBackgroundPage().notifyTargetPrice;
 
-selectTargetPriceType.value = chrome.extension.getBackgroundPage().priceTargetType
+selectTargetPriceType.value = chrome.extension.getBackgroundPage().priceTargetType;
+
+btnStart.disabled = chrome.extension.getBackgroundPage().timer !== null;
+btnStop.disabled = !btnStart.disabled;
+selectCurrency.disabled = btnStart.disabled;
 
 showResult();
