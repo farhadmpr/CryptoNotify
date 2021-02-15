@@ -10,7 +10,7 @@ var priceTarget = 0;
 var priceTargetType = "";
 
 function fetchCurrency(milisec, data) {
-  chrome.browserAction.setBadgeText({ text: "load" });
+  setBadge("load")
 
   timer = setInterval(function () {
     fetch(apiUrl, {
@@ -24,10 +24,7 @@ function fetchCurrency(milisec, data) {
           json.stats[ // convert rial to toman
             `${data.srcCurrency}-rls`].latest / 10;
 
-        // show first 4 chars of price
-        chrome.browserAction.setBadgeText({
-          text: result.toString().substr(0, 4),
-        });
+        setBadge(result)
 
         if (notifyPriceOffset) {
           if (result > lastPrice + priceChangeOffset) {
@@ -79,7 +76,7 @@ function fetchCurrency(milisec, data) {
       })
       .catch((err) => {
         console.log(err);
-        chrome.browserAction.setBadgeText({ text: "error" });
+        setBadge("error")
       });
   }, milisec);
 }
@@ -87,9 +84,17 @@ function fetchCurrency(milisec, data) {
 function stopFetch() {
   clearInterval(timer);
   timer = null;
-  chrome.browserAction.setBadgeText({ text: "" });
+  setBadge("")
 }
 
 function notify(options) {
   chrome.notifications.create("", options);
+}
+
+function setBadge(text) {
+  if (text !== undefined) {
+    chrome.browserAction.setBadgeText({
+      text: text.toString().substr(0, 4),
+    });
+  }
 }
