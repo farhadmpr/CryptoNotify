@@ -1,3 +1,6 @@
+const apiUrl = "https://api.nobitex.ir/market/stats";
+const iconUrl = "./icons/icon32.png";
+const notificationSound = new Audio("./sounds/notification.mp3");
 var timer = null;
 var notifyPriceOffset = false;
 var notifyTargetPrice = false;
@@ -5,13 +8,12 @@ let lastPrice = 0;
 var priceChangeOffset = 1000;
 var priceTarget = 0;
 var priceTargetType = "";
-let notificationSound = new Audio("./sounds/notification.mp3");
 
 function fetchCurrency(milisec, data) {
   chrome.browserAction.setBadgeText({ text: "load" });
 
   timer = setInterval(function () {
-    fetch("https://api.nobitex.ir/market/stats", {
+    fetch(apiUrl, {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -33,7 +35,7 @@ function fetchCurrency(milisec, data) {
             notify({
               title: `${data.srcCurrency.toUpperCase()} ▲`,
               message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${increasePercent.toLocaleString()}%)`,
-              iconUrl: "./icons/icon32.png",
+              iconUrl: iconUrl,
               type: "basic",
             });
           }
@@ -43,7 +45,7 @@ function fetchCurrency(milisec, data) {
             notify({
               title: `${data.srcCurrency.toUpperCase()} ▼`,
               message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (-${decreasePercent.toLocaleString()}%)`,
-              iconUrl: "./icons/icon32.png",
+              iconUrl: iconUrl,
               type: "basic",
             });
           }
@@ -54,7 +56,7 @@ function fetchCurrency(milisec, data) {
             notify({
               title: `${data.srcCurrency.toUpperCase()} Target >= ${priceTarget.toLocaleString()}`,
               message: `${result.toLocaleString()}`,
-              iconUrl: "./icons/icon32.png",
+              iconUrl: iconUrl,
               type: "basic",
             });
             notificationSound.play();
@@ -65,7 +67,7 @@ function fetchCurrency(milisec, data) {
             notify({
               title: `${data.srcCurrency.toUpperCase()} Target <= ${priceTarget.toLocaleString()}`,
               message: `${result.toLocaleString()}`,
-              iconUrl: "./icons/icon32.png",
+              iconUrl: iconUrl,
               type: "basic",
             });
             notificationSound.play();
