@@ -1,3 +1,4 @@
+const background = chrome.extension.getBackgroundPage();
 const btnStart = document.getElementById("btnStart");
 const btnStop = document.getElementById("btnStop");
 const selectCurrency = document.getElementById("selectCurrency");
@@ -12,16 +13,16 @@ const timerInterval = 3000;
 function btnStartClick(event) {
   if (!selectCurrency.value) return;
 
-  if (chrome.extension.getBackgroundPage().timer) return;
+  if (background.timer) return;
 
   const _data = {
     srcCurrency: selectCurrency.value,
     dstCurrency: "rls",
   };
 
-  chrome.extension.getBackgroundPage().fetchCurrency(timerInterval, _data);
+  background.fetchCurrency(timerInterval, _data);
 
-  chrome.extension.getBackgroundPage().notify({
+  background.notify({
     title: `Start ${selectCurrency.value.toUpperCase()}`,
     message: "Fetch started successfully!",
     iconUrl: "./icons/icon32.png",
@@ -34,8 +35,8 @@ function btnStartClick(event) {
 }
 
 function btnStopClick(event) {
-  chrome.extension.getBackgroundPage().stopFetch();
-  chrome.extension.getBackgroundPage().notify({
+  background.stopFetch();
+  background.notify({
     title: `Stop ${selectCurrency.value.toUpperCase()}`,
     message: "Fetch stoped successfully!",
     iconUrl: "./icons/icon32.png",
@@ -52,23 +53,23 @@ function selectCurrencyChange() {
 }
 
 function txtPriceOffsetChange() {
-  chrome.extension.getBackgroundPage().priceChangeOffset = txtPriceOffset.value;
+  background.priceChangeOffset = txtPriceOffset.value;
 }
 
 function notifyPriceOffsetChange(event) {
-  chrome.extension.getBackgroundPage().notifyPriceOffset = event.target.checked;
+  background.notifyPriceOffset = event.target.checked;
 }
 
 function txtTargetPriceChange() {
-  chrome.extension.getBackgroundPage().priceTarget = txtTargetPrice.value;
+  background.priceTarget = txtTargetPrice.value;
 }
 
 function notifyTargetPriceChange(event) {
-  chrome.extension.getBackgroundPage().notifyTargetPrice = event.target.checked;
+  background.notifyTargetPrice = event.target.checked;
 }
 
 function selectTargetPriceTypeChange(event) {
-  chrome.extension.getBackgroundPage().priceTargetType = event.target.value;
+  background.priceTargetType = event.target.value;
 }
 
 function showResult() {
@@ -103,7 +104,7 @@ function showResult() {
         }
       })
       .catch((err) => {
-        chrome.extension.getBackgroundPage().console.log(err);
+        background.console.log(err);
       });
   }, timerInterval);
 }
@@ -121,15 +122,15 @@ chrome.storage.local.get(["currency"], function (result) {
   selectCurrency.value = result.currency;
 });
 
-txtPriceOffset.value = chrome.extension.getBackgroundPage().priceChangeOffset;
-notifyPriceOffset.checked = chrome.extension.getBackgroundPage().notifyPriceOffset;
+txtPriceOffset.value = background.priceChangeOffset;
+notifyPriceOffset.checked = background.notifyPriceOffset;
 
-txtTargetPrice.value = chrome.extension.getBackgroundPage().priceTarget;
-notifyTargetPrice.checked = chrome.extension.getBackgroundPage().notifyTargetPrice;
+txtTargetPrice.value = background.priceTarget;
+notifyTargetPrice.checked = background.notifyTargetPrice;
 
-selectTargetPriceType.value = chrome.extension.getBackgroundPage().priceTargetType;
+selectTargetPriceType.value = background.priceTargetType;
 
-btnStart.disabled = chrome.extension.getBackgroundPage().timer !== null;
+btnStart.disabled = background.timer !== null;
 btnStop.disabled = !btnStart.disabled;
 selectCurrency.disabled = btnStart.disabled;
 

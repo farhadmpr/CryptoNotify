@@ -1,5 +1,6 @@
 {
   "name": "CryptoNotify",
+  "description" : "Notify crypto price from the Nobitex API",
   "version": "0.0.1",
   "manifest_version": 2,
   "background": {
