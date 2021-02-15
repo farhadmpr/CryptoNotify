@@ -65,7 +65,7 @@ function startFetch(milisec, data) {
           type: "basic",
         });
         notificationSound.play();
-        priceTargetType = "";
+        notifyTargetPrice = false;
       }
 
       if (priceTargetType === "lower" && result <= priceTarget) {
@@ -76,7 +76,7 @@ function startFetch(milisec, data) {
           type: "basic",
         });
         notificationSound.play();
-        priceTargetType = "";
+        notifyTargetPrice = false;
       }
     }
 
