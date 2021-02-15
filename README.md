@@ -10,6 +10,11 @@ This extension configured to the Nobitex.ir cryptocurrency exchange market API.
 ![demo3](https://raw.githubusercontent.com/farhadmpr/CryptoNotify/main/demo/Screen2.png)
 
 ------------
+## Requirements
+- Bootstrap 5.0.0
+- Vazir font 27.2.1
+
+------------
 ## TODO list
 - [x] Fetch price from api
 - [x] Start and stop button
