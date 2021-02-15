@@ -9,82 +9,85 @@ var priceChangeOffset = 1000;
 var priceTarget = 0;
 var priceTargetType = "";
 
-function fetchCurrency(milisec, data) {
-  setBadge("load")
-
-  timer = setInterval(function () {
-    fetch(apiUrl, {
+async function getPriceFromApi(data) {
+  try {
+    const result = await fetch(apiUrl, {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-type": "application/json; charset=UTF-8" },
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        const result =
-          json.stats[ // convert rial to toman
-            `${data.srcCurrency}-rls`].latest / 10;
+    });
+    const jsonResult = await result.json();
+    const latestPriceToman =
+      jsonResult.stats[`${data.srcCurrency}-rls`].latest / 10;
+    return latestPriceToman;
+  } catch (error) {
+    console.log(error);
+    setBadge("error");
+  }
+}
 
-        setBadge(result)
+function startFetch(milisec, data) {
+  setBadge("load");
 
-        if (notifyPriceOffset) {
-          if (result > lastPrice + priceChangeOffset) {
-            let increasePercent = ((result - lastPrice) / result) * 100;
-            notify({
-              title: `${data.srcCurrency.toUpperCase()} ▲`,
-              message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${increasePercent.toLocaleString()}%)`,
-              iconUrl: iconUrl,
-              type: "basic",
-            });
-          }
+  timer = setInterval(async function () {
+    const result = await getPriceFromApi(data);
 
-          if (result < lastPrice - priceChangeOffset) {
-            let decreasePercent = ((lastPrice - result) / result) * 100;
-            notify({
-              title: `${data.srcCurrency.toUpperCase()} ▼`,
-              message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (-${decreasePercent.toLocaleString()}%)`,
-              iconUrl: iconUrl,
-              type: "basic",
-            });
-          }
-        }
+    setBadge(result);
 
-        if (notifyTargetPrice) {
-          if (priceTargetType === "bigger" && result >= priceTarget) {
-            notify({
-              title: `${data.srcCurrency.toUpperCase()} Target >= ${priceTarget.toLocaleString()}`,
-              message: `${result.toLocaleString()}`,
-              iconUrl: iconUrl,
-              type: "basic",
-            });
-            notificationSound.play();
-            priceTargetType = "";
-          }
+    if (notifyPriceOffset) {
+      if (result > lastPrice + priceChangeOffset) {
+        let increasePercent = ((result - lastPrice) / result) * 100;
+        notify({
+          title: `${data.srcCurrency.toUpperCase()} ▲`,
+          message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${increasePercent.toLocaleString()}%)`,
+          iconUrl: iconUrl,
+          type: "basic",
+        });
+      }
 
-          if (priceTargetType === "lower" && result <= priceTarget) {
-            notify({
-              title: `${data.srcCurrency.toUpperCase()} Target <= ${priceTarget.toLocaleString()}`,
-              message: `${result.toLocaleString()}`,
-              iconUrl: iconUrl,
-              type: "basic",
-            });
-            notificationSound.play();
-            priceTargetType = "";
-          }
-        }
+      if (result < lastPrice - priceChangeOffset) {
+        let decreasePercent = ((lastPrice - result) / result) * 100;
+        notify({
+          title: `${data.srcCurrency.toUpperCase()} ▼`,
+          message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (-${decreasePercent.toLocaleString()}%)`,
+          iconUrl: iconUrl,
+          type: "basic",
+        });
+      }
+    }
 
-        lastPrice = result;
-      })
-      .catch((err) => {
-        console.log(err);
-        setBadge("error")
-      });
+    if (notifyTargetPrice) {
+      if (priceTargetType === "bigger" && result >= priceTarget) {
+        notify({
+          title: `${data.srcCurrency.toUpperCase()} Target >= ${priceTarget.toLocaleString()}`,
+          message: `${result.toLocaleString()}`,
+          iconUrl: iconUrl,
+          type: "basic",
+        });
+        notificationSound.play();
+        priceTargetType = "";
+      }
+
+      if (priceTargetType === "lower" && result <= priceTarget) {
+        notify({
+          title: `${data.srcCurrency.toUpperCase()} Target <= ${priceTarget.toLocaleString()}`,
+          message: `${result.toLocaleString()}`,
+          iconUrl: iconUrl,
+          type: "basic",
+        });
+        notificationSound.play();
+        priceTargetType = "";
+      }
+    }
+
+    lastPrice = result;
   }, milisec);
 }
 
 function stopFetch() {
   clearInterval(timer);
   timer = null;
-  setBadge("")
+  setBadge("");
 }
 
 function notify(options) {

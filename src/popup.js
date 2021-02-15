@@ -20,7 +20,7 @@ function btnStartClick(event) {
     dstCurrency: "rls",
   };
 
-  background.fetchCurrency(timerInterval, _data);
+  background.startFetch(timerInterval, _data);
 
   background.notify({
     title: `Start ${selectCurrency.value.toUpperCase()}`,
