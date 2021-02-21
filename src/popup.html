@@ -21,62 +21,26 @@
                         تنظیمات
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label" for="selectCurrency">ارز دیجیتال: </label>
-                            <select class="form-select" name="selectCurrency" id="selectCurrency">
-                                <option value=""></option>
-                                <option value="btc">BTC</option>
-                                <option value="eth">ETH</option>
-                                <option value="xrp">XRP</option>
-                                <option value="usdt">USDT</option>
-                                <option value="bch">BCH</option>
-                                <option value="ltc">LTC</option>
-                                <option value="bnb">BNB</option>
-                                <option value="eos">EOS</option>
-                                <option value="xlm">XLM</option>
-                                <option value="trx">TRX</option>
-                                <option value="etc">ETC</option>
-                                <option value="doge">DOGE</option>
-                            </select>
-                        </div>
-
-                        <div class="my-4">
-                            <div>
-                                <input class="form-check-input" type="checkbox" name="notifyPriceOffset"
-                                    id="notifyPriceOffset">
-                                <label class="form-label" for="notifyPriceOffset">آگاه سازی تغییر قیمت</label>
-                            </div>
-
-                            <div>
-                                <label class="form-label" for="txtPriceOffset">میزان تغییر قیمت برای آگاه سازی به
-                                    تومان</label>
-                                <input class="form-control" type="number" name="txtPriceOffset" id="txtPriceOffset">
+                        <div class="mb-3 row">
+                            <div class="col-4">
+                                <label class="form-label" for="txtCurrency">ارز دیجیتال: </label>
+                                <input class="form-control" name="txtCurrency" id="txtCurrency"
+                                    placeholder="مثال: btc-usdt">
                             </div>
                         </div>
 
-                        <div class="my-4">
-                            <div>
-                                <input class="form-check-input" type="checkbox" name="notifyTargetPrice"
-                                    id="notifyTargetPrice">
-                                <label class="form-label" for="notifyTargetPrice">آگاه سازی رسیدن به قیمت</label>
-                            </div>
-
-                            <div>
-                                <label class="form-label" for="txtTargetPrice">قیمت مد نظر برای آگاه سازی به
-                                    تومان</label>
-                                <div class="row">
-                                    <div class="col-4">
-                                        <select class="form-select" name="selectTargetPriceType"
-                                            id="selectTargetPriceType">
-                                            <option value=""></option>
-                                            <option value="bigger">بزرگتر از</option>
-                                            <option value="lower">کوچکتر از</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-8">
-                                        <input class="form-control" type="number" name="txtTargetPrice"
-                                            id="txtTargetPrice">
-                                    </div>
+                        <div class="my-5">
+                            <div class="row">
+                                <label class="form-label" for="txtTargetPrice">قیمت مد نظر برای آگاه سازی
+                                </label>
+                                <div class="col-4">
+                                    <select class="form-select mb-3" name="selectTargetPriceType" id="selectTargetPriceType">
+                                        <option value=""></option>
+                                        <option value="bigger">بزرگتر از</option>
+                                        <option value="lower">کوچکتر از</option>
+                                    </select>
+                                    <input class="form-control mb-3" type="number" name="txtTargetPrice" id="txtTargetPrice">
+                                    <button id="btnAddNotification" class="btn btn-primary">افزودن</button>
                                 </div>
                             </div>
                         </div>
