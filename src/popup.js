@@ -74,7 +74,7 @@ function selectTargetPriceTypeChange(event) {
 
 function showResult() {
   const _data = {
-    srcCurrency: "btc,eth,ltc,xrp,bch,bnb,eos,xlm,etc,trx,doge",
+    srcCurrency: "btc,eth,ltc,xrp,bch,bnb,eos,xlm,etc,trx,doge,usdt",
     dstCurrency: "rls",
   };
 
