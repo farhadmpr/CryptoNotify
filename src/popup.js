@@ -7,6 +7,7 @@ const resultBody = document.getElementById("resultBody");
 const txtCurrency = document.getElementById("txtCurrency");
 const txtTargetPrice = document.getElementById("txtTargetPrice");
 const selectTargetPriceType = document.getElementById("selectTargetPriceType");
+const btnDelete = document.getElementsByClassName("btnDelete");
 const timerInterval = 3000;
 
 // function btnStartClick(event) {
@@ -59,32 +60,45 @@ const timerInterval = 3000;
 //   background.priceTargetType = event.target.value;
 // }
 
+function btnDeleteClick(event) {
+  const index = event.target.getAttribute("data-index");
+  notifyList.splice(index, 1);
+  chrome.storage.local.set({ notificationList: notifyList });
+  event.target.parentElement.parentElement.remove();
+}
+
 function showResult() {
-  setInterval(() => {
-    fetch("https://api.cryptonator.com/api/ticker/btc-usdt")
-      .then((response) => response.json())
-      .then((json) => {
-        resultBody.innerHTML = "";
-        // for (const crypto in json.stats) {
-        //   let tr = document.createElement("tr");
-        //   tr.innerHTML = `
-        //       <td>${crypto.split("-")[0].toUpperCase()}</td>
-        //       <td>${(json.stats[crypto].latest / 10).toLocaleString()}</td>
-        //       <td>${(json.stats[crypto].bestSell / 10).toLocaleString()}</td>
-        //       <td>${(json.stats[crypto].bestBuy / 10).toLocaleString()}</td>
-        //       <td dir="ltr" class=${
-        //         json.stats[crypto].dayChange >= 0
-        //           ? "text-success"
-        //           : "text-danger"
-        //       }>${json.stats[crypto].dayChange.toLocaleString()}%</td>
-        //     `;
-        //   resultBody.appendChild(tr);
-        // }
-        background.console.log(json.ticker.price)
-      })
-      .catch((err) => {
-        background.console.log(err);
+  setInterval(async () => {
+    resultBody.innerHTML = "";
+    let trList = [];
+
+    for (const [index, crypto] of notifyList.entries()) {
+      let response = await fetch(
+        `https://api.cryptonator.com/api/ticker/${crypto.currency}`
+      );
+      if (response.ok) {
+        response = await response.json();
+        let td = `
+          <td>${crypto.currency.toUpperCase()}</td>
+          <td>${response.ticker.price.toLocaleString()}</td>
+          <td>${crypto.type}</td>
+          <td>${crypto.target.toLocaleString()}</td>
+          <td><a data-index="${index}" class="btn btn-danger btn-sm btnDelete">حذف</a></td>
+        `;
+        trList.push(td.toString());
+      }
+    }
+
+    for (const trBody of trList) {
+      let tr = document.createElement("tr");
+      tr.innerHTML = trBody;
+      resultBody.appendChild(tr);
+      btnAddNotification.addEventListener("click", btnAddNotificationClick);
+      let btnDeleteList = document.getElementsByClassName("btnDelete");
+      Array.from(btnDeleteList).forEach((btn) => {
+        btn.addEventListener("click", btnDeleteClick);
       });
+    }
   }, timerInterval);
 }
 
@@ -96,6 +110,7 @@ function btnAddNotificationClick() {
   });
 
   chrome.storage.local.set({ notificationList: notifyList });
+  background.console.log("add");
 }
 
 // btnStart.addEventListener("click", btnStartClick);
