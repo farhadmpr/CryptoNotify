@@ -1,103 +1,63 @@
-const apiUrl = "https://api.nobitex.ir/market/stats";
+const apiUrl = "https://api.cryptonator.com/api/ticker/";
 const iconUrl = "./icons/icon32.png";
 const notificationSound = new Audio("./sounds/notification.mp3");
+let notifyList = [];
 var timer = null;
-var notifyPriceOffset = false;
-var notifyTargetPrice = false;
-let lastPrice = 0;
-var priceChangeOffset = 1000;
-var priceTarget = 0;
-var priceTargetType = "";
 
-async function getPriceFromApi(data) {
+async function getPriceFromApi(currency) {
   try {
-    const result = await fetch(apiUrl, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-type": "application/json; charset=UTF-8" },
-    });
+    const result = await fetch(apiUrl + currency);
     const jsonResult = await result.json();
-    const latestPriceToman =
-      jsonResult.stats[`${data.srcCurrency}-rls`].latest / 10;
-    return latestPriceToman;
+    return jsonResult.ticker.price;
   } catch (error) {
     console.log(error);
-    setBadge("error");
+    setBadge("erro");
   }
 }
 
-function startFetch(milisec, data) {
+function startFetch(milisec) {
   setBadge("load");
 
   timer = setInterval(async function () {
-    const result = await getPriceFromApi(data);
-
-    setBadge(result);
-
-    if (notifyPriceOffset) {
-      if (result > lastPrice + priceChangeOffset) {
-        let increasePercent = ((result - lastPrice) / result) * 100;
+    for (const [index, crypto] of notifyList.entries()) {
+      const priceFromApi = await getPriceFromApi(crypto.currency);
+      if (
+        crypto.type === "bigger" &&
+        Number(crypto.price) <= Number(priceFromApi)
+      ) {
         notify({
-          title: `${data.srcCurrency.toUpperCase()} ▲`,
-          message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (+${increasePercent.toLocaleString()}%)`,
+          title: `${crypto.currency.toUpperCase()} ▲`,
+          message: `${Number(priceFromApi).toLocaleString()} > ${Number(
+            crypto.priceTarget
+          ).toLocaleString()})`,
           iconUrl: iconUrl,
           type: "basic",
         });
       }
 
-      if (result < lastPrice - priceChangeOffset) {
-        let decreasePercent = ((lastPrice - result) / result) * 100;
+      if (
+        crypto.type === "lower" &&
+        Number(crypto.price) >= Number(priceFromApi)
+      ) {
         notify({
-          title: `${data.srcCurrency.toUpperCase()} ▼`,
-          message: `${lastPrice.toLocaleString()} ➜ ${result.toLocaleString()} (-${decreasePercent.toLocaleString()}%)`,
+          title: `${crypto.currency.toUpperCase()} ▼`,
+          message: `${Number(priceFromApi).toLocaleString()} < ${Number(
+            crypto.priceTarget
+          ).toLocaleString()})`,
           iconUrl: iconUrl,
           type: "basic",
         });
       }
     }
-
-    if (notifyTargetPrice) {
-      if (priceTargetType === "bigger" && result >= priceTarget) {
-        notify({
-          title: `${data.srcCurrency.toUpperCase()} Target >= ${priceTarget.toLocaleString()}`,
-          message: `${result.toLocaleString()}`,
-          iconUrl: iconUrl,
-          type: "basic",
-        });
-        notificationSound.play();
-        notifyTargetPrice = false;
-      }
-
-      if (priceTargetType === "lower" && result <= priceTarget) {
-        notify({
-          title: `${data.srcCurrency.toUpperCase()} Target <= ${priceTarget.toLocaleString()}`,
-          message: `${result.toLocaleString()}`,
-          iconUrl: iconUrl,
-          type: "basic",
-        });
-        notificationSound.play();
-        notifyTargetPrice = false;
-      }
-    }
-
-    lastPrice = result;
   }, milisec);
-}
-
-function stopFetch() {
-  clearInterval(timer);
-  timer = null;
-  setBadge("");
 }
 
 function notify(options) {
   chrome.notifications.create("", options);
 }
 
-function setBadge(text) {
-  if (text !== undefined) {
-    chrome.browserAction.setBadgeText({
-      text: text.toString().substr(0, 4),
-    });
+chrome.storage.local.get(["notificationList"], async function (result) {
+  if (result.notificationList) {
+    notifyList = result.notificationList;
   }
-}
+});

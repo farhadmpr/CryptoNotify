@@ -10,56 +10,6 @@ const selectTargetPriceType = document.getElementById("selectTargetPriceType");
 const btnDelete = document.getElementsByClassName("btnDelete");
 const timerInterval = 10000; // 10sec
 
-// function btnStartClick(event) {
-//   if (!txtCurrency.value) return;
-
-//   if (background.timer) return;
-
-//   const _data = {
-//     srcCurrency: txtCurrency.value,
-//     dstCurrency: "rls",
-//   };
-
-//   background.startFetch(timerInterval, _data);
-
-//   background.notify({
-//     title: `Start ${txtCurrency.value.toUpperCase()}`,
-//     message: "Fetch started successfully!",
-//     iconUrl: "./icons/icon32.png",
-//     type: "basic",
-//   });
-
-//   event.target.disabled = true;
-//   btnStop.disabled = false;
-//   txtCurrency.disabled = true;
-// }
-
-// function btnStopClick(event) {
-//   background.stopFetch();
-//   background.notify({
-//     title: `Stop ${txtCurrency.value.toUpperCase()}`,
-//     message: "Fetch stoped successfully!",
-//     iconUrl: "./icons/icon32.png",
-//     type: "basic",
-//   });
-
-//   event.target.disabled = true;
-//   btnStart.disabled = false;
-//   txtCurrency.disabled = false;
-// }
-
-// function txtCurrencyChange() {
-//   chrome.storage.local.set({ currency: txtCurrency.value });
-// }
-
-// function txtTargetPriceChange() {
-//   background.priceTarget = txtTargetPrice.value;
-// }
-
-// function selectTargetPriceTypeChange(event) {
-//   background.priceTargetType = event.target.value;
-// }
-
 function btnDeleteClick(event) {
   const index = event.target.getAttribute("data-index");
   notifyList.splice(index, 1);
@@ -100,7 +50,7 @@ async function fetchAndShow() {
   }
 }
 
-function showResult() {
+function showResultTimer() {
   setInterval(async () => {
     await fetchAndShow();
   }, timerInterval);
@@ -126,8 +76,7 @@ function btnAddNotificationClick() {
   }
 }
 
-// btnStart.addEventListener("click", btnStartClick);
-// btnStop.addEventListener("click", btnStopClick);
+
 btnAddNotification.addEventListener("click", btnAddNotificationClick);
 
 chrome.storage.local.get(["notificationList"], async function (result) {
@@ -137,8 +86,4 @@ chrome.storage.local.get(["notificationList"], async function (result) {
   }
 });
 
-//btnStart.disabled = background.timer !== null;
-//btnStop.disabled = !btnStart.disabled;
-
-
-showResult();
+showResultTimer();
