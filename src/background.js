@@ -7,8 +7,8 @@ var timer = null;
 async function getPriceFromApi(currency) {
   try {
     const result = await fetch(apiUrl + currency);
-    const jsonResult = await result.json();
-    return jsonResult.ticker.price;
+    const jsonResult = await result.json();    
+    return jsonResult?.ticker?.price;
   } catch (error) {
     console.log(error);
     setBadge("error");

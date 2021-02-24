@@ -8,7 +8,7 @@ const txtCurrency = document.getElementById("txtCurrency");
 const txtTargetPrice = document.getElementById("txtTargetPrice");
 const selectTargetPriceType = document.getElementById("selectTargetPriceType");
 const btnDelete = document.getElementsByClassName("btnDelete");
-const timerInterval = 3000; // 10sec
+const timerInterval = 7000;
 
 function btnDeleteClick(event) {
   const index = event.target.getAttribute("data-index");
@@ -35,12 +35,12 @@ async function fetchAndShow() {
   for (const [index, crypto] of notifyList.entries()) {
     let response = await fetch(
       `https://api.cryptonator.com/api/ticker/${crypto.currency}`
-    );
+    );    
     if (response.ok) {
-      response = await response.json();
+      response = await response.json();      
       let td = `
         <td>${crypto.currency.toUpperCase()}</td>
-        <td>${Number(response.ticker.price).toLocaleString()}</td>
+        <td>${Number(response?.ticker?.price).toLocaleString()}</td>
         <td>${crypto.type}</td>
         <td>${Number(crypto.target).toLocaleString()}</td>
         <td>${crypto.targetReachTime}</td>
