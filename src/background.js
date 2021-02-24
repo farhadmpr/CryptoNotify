@@ -11,12 +11,16 @@ async function getPriceFromApi(currency) {
     return jsonResult.ticker.price;
   } catch (error) {
     console.log(error);
-    setBadge("erro");
+    setBadge("error");
   }
 }
 
 function startFetch(milisec) {
-  setBadge("load");
+  chrome.storage.local.get(["notificationList"], async function (result) {
+    if (result.notificationList) {
+      notifyList = result.notificationList;
+    }
+  });
 
   timer = setInterval(async function () {
     for (const [index, crypto] of notifyList.entries()) {
@@ -56,8 +60,10 @@ function notify(options) {
   chrome.notifications.create("", options);
 }
 
-chrome.storage.local.get(["notificationList"], async function (result) {
-  if (result.notificationList) {
-    notifyList = result.notificationList;
+function setBadge(text) {
+  if (text !== undefined) {
+    chrome.browserAction.setBadgeText({
+      text: text.toString().substr(0, 4),
+    });
   }
-});
+}
