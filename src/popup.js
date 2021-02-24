@@ -8,7 +8,7 @@ const txtCurrency = document.getElementById("txtCurrency");
 const txtTargetPrice = document.getElementById("txtTargetPrice");
 const selectTargetPriceType = document.getElementById("selectTargetPriceType");
 const btnDelete = document.getElementsByClassName("btnDelete");
-const timerInterval = 3000;
+const timerInterval = 10000; // 10sec
 
 // function btnStartClick(event) {
 //   if (!txtCurrency.value) return;
@@ -67,61 +67,78 @@ function btnDeleteClick(event) {
   event.target.parentElement.parentElement.remove();
 }
 
+async function fetchAndShow() {
+  resultBody.innerHTML = "";
+  let trList = [];
+
+  for (const [index, crypto] of notifyList.entries()) {
+    let response = await fetch(
+      `https://api.cryptonator.com/api/ticker/${crypto.currency}`
+    );
+    if (response.ok) {
+      response = await response.json();
+      let td = `
+        <td>${crypto.currency.toUpperCase()}</td>
+        <td>${Number(response.ticker.price).toLocaleString()}</td>
+        <td>${crypto.type}</td>
+        <td>${Number(crypto.target).toLocaleString()}</td>
+        <td><a data-index="${index}" class="btn btn-danger btn-sm btnDelete">حذف</a></td>
+      `;
+      trList.push(td.toString());
+    }
+  }
+
+  for (const trBody of trList) {
+    let tr = document.createElement("tr");
+    tr.innerHTML = trBody;
+    resultBody.appendChild(tr);
+    btnAddNotification.addEventListener("click", btnAddNotificationClick);
+    let btnDeleteList = document.getElementsByClassName("btnDelete");
+    Array.from(btnDeleteList).forEach((btn) => {
+      btn.addEventListener("click", btnDeleteClick);
+    });
+  }
+}
+
 function showResult() {
   setInterval(async () => {
-    resultBody.innerHTML = "";
-    let trList = [];
-
-    for (const [index, crypto] of notifyList.entries()) {
-      let response = await fetch(
-        `https://api.cryptonator.com/api/ticker/${crypto.currency}`
-      );
-      if (response.ok) {
-        response = await response.json();
-        let td = `
-          <td>${crypto.currency.toUpperCase()}</td>
-          <td>${Number(response.ticker.price).toLocaleString()}</td>
-          <td>${crypto.type}</td>
-          <td>${Number(crypto.target).toLocaleString()}</td>
-          <td><a data-index="${index}" class="btn btn-danger btn-sm btnDelete">حذف</a></td>
-        `;
-        trList.push(td.toString());
-      }
-    }
-
-    for (const trBody of trList) {
-      let tr = document.createElement("tr");
-      tr.innerHTML = trBody;
-      resultBody.appendChild(tr);
-      btnAddNotification.addEventListener("click", btnAddNotificationClick);
-      let btnDeleteList = document.getElementsByClassName("btnDelete");
-      Array.from(btnDeleteList).forEach((btn) => {
-        btn.addEventListener("click", btnDeleteClick);
-      });
-    }
+    await fetchAndShow();
   }, timerInterval);
 }
 
 function btnAddNotificationClick() {
-  notifyList.push({
-    currency: txtCurrency.value,
-    target: txtTargetPrice.value,
-    type: selectTargetPriceType.value,
-  });
+  if (
+    txtCurrency.value &&
+    txtTargetPrice.value &&
+    selectTargetPriceType.value
+  ) {
+    notifyList.push({
+      currency: txtCurrency.value,
+      target: txtTargetPrice.value,
+      type: selectTargetPriceType.value,
+    });
 
-  chrome.storage.local.set({ notificationList: notifyList });
-  background.console.log("add");
+    chrome.storage.local.set({ notificationList: notifyList });
+
+    txtCurrency.value = "";
+    txtTargetPrice.value = "";
+    selectTargetPriceType.value = "";
+  }
 }
 
 // btnStart.addEventListener("click", btnStartClick);
 // btnStop.addEventListener("click", btnStopClick);
 btnAddNotification.addEventListener("click", btnAddNotificationClick);
 
-chrome.storage.local.get(["notificationList"], function (result) {
-  if (result.notificationList) notifyList = result.notificationList;
+chrome.storage.local.get(["notificationList"], async function (result) {
+  if (result.notificationList) {
+    notifyList = result.notificationList;
+    await fetchAndShow();
+  }
 });
 
 //btnStart.disabled = background.timer !== null;
 //btnStop.disabled = !btnStart.disabled;
+
 
 showResult();

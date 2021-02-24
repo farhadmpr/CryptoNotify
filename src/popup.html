@@ -29,28 +29,31 @@
                             </div>
                         </div>
 
-                        <div class="my-5">
-                            <div class="row">
-                                <label class="form-label" for="txtTargetPrice">قیمت مد نظر برای آگاه سازی
-                                </label>
-                                <div class="col-4">
-                                    <select class="form-select mb-3" name="selectTargetPriceType" id="selectTargetPriceType">
-                                        <option value=""></option>
-                                        <option value="bigger">بزرگتر از</option>
-                                        <option value="lower">کوچکتر از</option>
-                                    </select>
-                                    <input class="form-control mb-3" type="number" name="txtTargetPrice" id="txtTargetPrice">
-                                    <button id="btnAddNotification" class="btn btn-primary">افزودن</button>
-                                </div>
+                        <div class="row">
+                            <label class="form-label" for="txtTargetPrice">قیمت مد نظر برای آگاه سازی:
+                            </label>
+                            <div class="col-auto">
+                                <select class="form-select mb-3" name="selectTargetPriceType"
+                                    id="selectTargetPriceType">
+                                    <option value=""></option>
+                                    <option value="bigger">بزرگتر از</option>
+                                    <option value="lower">کوچکتر از</option>
+                                </select>
                             </div>
-                        </div>
+                            <div class="col-auto">
+                                <input class="form-control mb-3" type="number" name="txtTargetPrice"
+                                    id="txtTargetPrice">
+                            </div>
+                            <div class="col-auto">
+                                <button id="btnAddNotification" class="btn btn-primary">افزودن</button>
+                            </div>
 
-                        <input class="btn btn-success mb-3" type="button" value="شروع کن" id="btnStart">
-                        <input class="btn btn-danger mb-3" type="button" value="اتمام" id="btnStop">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row my-3">
             <div class="col">
                 <div class="card">
