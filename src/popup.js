@@ -80,9 +80,9 @@ function showResult() {
         response = await response.json();
         let td = `
           <td>${crypto.currency.toUpperCase()}</td>
-          <td>${response.ticker.price.toLocaleString()}</td>
+          <td>${Number(response.ticker.price).toLocaleString()}</td>
           <td>${crypto.type}</td>
-          <td>${crypto.target.toLocaleString()}</td>
+          <td>${Number(crypto.target).toLocaleString()}</td>
           <td><a data-index="${index}" class="btn btn-danger btn-sm btnDelete">حذف</a></td>
         `;
         trList.push(td.toString());
