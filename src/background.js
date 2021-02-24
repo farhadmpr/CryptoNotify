@@ -22,17 +22,17 @@ function startFetch(milisec) {
     }
   });
 
-  timer = setInterval(async function () {
+  timer = setInterval(async function () {    
     for (const [index, crypto] of notifyList.entries()) {
-      const priceFromApi = await getPriceFromApi(crypto.currency);
+      const priceFromApi = await getPriceFromApi(crypto.currency);      
       if (
         crypto.type === "bigger" &&
-        Number(crypto.price) <= Number(priceFromApi)
+        Number(crypto.target) <= Number(priceFromApi)
       ) {
         notify({
           title: `${crypto.currency.toUpperCase()} ▲`,
           message: `${Number(priceFromApi).toLocaleString()} > ${Number(
-            crypto.priceTarget
+            crypto.target
           ).toLocaleString()})`,
           iconUrl: iconUrl,
           type: "basic",
@@ -41,12 +41,12 @@ function startFetch(milisec) {
 
       if (
         crypto.type === "lower" &&
-        Number(crypto.price) >= Number(priceFromApi)
+        Number(crypto.target) >= Number(priceFromApi)
       ) {
         notify({
           title: `${crypto.currency.toUpperCase()} ▼`,
           message: `${Number(priceFromApi).toLocaleString()} < ${Number(
-            crypto.priceTarget
+            crypto.target
           ).toLocaleString()})`,
           iconUrl: iconUrl,
           type: "basic",

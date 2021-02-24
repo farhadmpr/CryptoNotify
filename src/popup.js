@@ -8,7 +8,7 @@ const txtCurrency = document.getElementById("txtCurrency");
 const txtTargetPrice = document.getElementById("txtTargetPrice");
 const selectTargetPriceType = document.getElementById("selectTargetPriceType");
 const btnDelete = document.getElementsByClassName("btnDelete");
-const timerInterval = 10000; // 10sec
+const timerInterval = 3000; // 10sec
 
 function btnDeleteClick(event) {
   const index = event.target.getAttribute("data-index");
@@ -76,8 +76,44 @@ function btnAddNotificationClick() {
   }
 }
 
+function btnStartClick(event) {
+  if (background.timer) return;
+
+  background.startFetch(timerInterval);
+
+  background.notify({
+    title: `Start`,
+    message: "Fetch started successfully!",
+    iconUrl: "./icons/icon32.png",
+    type: "basic",
+  });
+
+  background.setBadge("Work")
+
+  event.target.disabled = true;
+  btnStop.disabled = false;
+}
+
+function btnStopClick(event) {
+  clearInterval(background.timer)
+  background.timer=null
+
+  background.notify({
+    title: `Stop`,
+    message: "Fetch stoped successfully!",
+    iconUrl: "./icons/icon32.png",
+    type: "basic",
+  });
+
+  background.setBadge("")
+
+  event.target.disabled = true;
+  btnStart.disabled = false;
+}
 
 btnAddNotification.addEventListener("click", btnAddNotificationClick);
+btnStart.addEventListener("click", btnStartClick);
+btnStop.addEventListener("click", btnStopClick);
 
 chrome.storage.local.get(["notificationList"], async function (result) {
   if (result.notificationList) {
