@@ -15,42 +15,63 @@ async function getPriceFromApi(currency) {
   }
 }
 
+function updateTargetReachTime(index, obj) {
+  notifyList[index] = obj;
+  chrome.storage.local.set({ notificationList: notifyList });
+}
+
 function startFetch(milisec) {
-  chrome.storage.local.get(["notificationList"], async function (result) {
-    if (result.notificationList) {
-      notifyList = result.notificationList;
-    }
-  });
-
-  timer = setInterval(async function () {    
-    for (const [index, crypto] of notifyList.entries()) {
-      const priceFromApi = await getPriceFromApi(crypto.currency);      
-      if (
-        crypto.type === "bigger" &&
-        Number(crypto.target) <= Number(priceFromApi)
-      ) {
-        notify({
-          title: `${crypto.currency.toUpperCase()} ▲`,
-          message: `${Number(priceFromApi).toLocaleString()} > ${Number(
-            crypto.target
-          ).toLocaleString()})`,
-          iconUrl: iconUrl,
-          type: "basic",
-        });
+  timer = setInterval(async function () {
+    chrome.storage.local.get(["notificationList"], async function (result) {
+      if (result.notificationList) {
+        notifyList = result.notificationList;
       }
+    });
 
-      if (
-        crypto.type === "lower" &&
-        Number(crypto.target) >= Number(priceFromApi)
-      ) {
-        notify({
-          title: `${crypto.currency.toUpperCase()} ▼`,
-          message: `${Number(priceFromApi).toLocaleString()} < ${Number(
-            crypto.target
-          ).toLocaleString()})`,
-          iconUrl: iconUrl,
-          type: "basic",
-        });
+    for (const [index, crypto] of notifyList.entries()) {
+      const priceFromApi = await getPriceFromApi(crypto.currency);
+      if (crypto.isNotificationShowed === false) {
+        if (
+          crypto.type === "bigger" &&
+          Number(crypto.target) <= Number(priceFromApi)
+        ) {
+          notify({
+            title: `${crypto.currency.toUpperCase()} ▲`,
+            message: `${Number(priceFromApi).toLocaleString()} > ${Number(
+              crypto.target
+            ).toLocaleString()}`,
+            iconUrl: iconUrl,
+            type: "basic",
+          });
+          notificationSound.play();
+          crypto.targetReachTime = new Date().toLocaleString(
+            "fa-IR",
+            "yyyy/mm/dd HH:MM:ss"
+          );
+          crypto.isNotificationShowed = true;
+          updateTargetReachTime(index, crypto);
+        }
+
+        if (
+          crypto.type === "lower" &&
+          Number(crypto.target) >= Number(priceFromApi)
+        ) {
+          notify({
+            title: `${crypto.currency.toUpperCase()} ▼`,
+            message: `${Number(priceFromApi).toLocaleString()} < ${Number(
+              crypto.target
+            ).toLocaleString()}`,
+            iconUrl: iconUrl,
+            type: "basic",
+          });
+          notificationSound.play();
+          crypto.targetReachTime = new Date().toLocaleString(
+            "fa-IR",
+            "yyyy/mm/dd HH:MM:ss"
+          );
+          crypto.isNotificationShowed = true;
+          updateTargetReachTime(index, crypto);
+        }
       }
     }
   }, milisec);
@@ -66,4 +87,9 @@ function setBadge(text) {
       text: text.toString().substr(0, 4),
     });
   }
+}
+
+function stopTimer() {
+  clearInterval(timer);
+  timer = null;
 }

@@ -17,9 +17,20 @@ function btnDeleteClick(event) {
   event.target.parentElement.parentElement.remove();
 }
 
+function btnResetClick(event) {
+  const index = event.target.getAttribute("data-index");
+  notifyList[index].targetReachTime = "";
+  notifyList[index].isNotificationShowed = false;
+  chrome.storage.local.set({ notificationList: notifyList });
+}
+
 async function fetchAndShow() {
   resultBody.innerHTML = "";
   let trList = [];
+
+  chrome.storage.local.get(["notificationList"], async function (result) {
+    if (result.notificationList) notifyList = result.notificationList;
+  });
 
   for (const [index, crypto] of notifyList.entries()) {
     let response = await fetch(
@@ -32,7 +43,9 @@ async function fetchAndShow() {
         <td>${Number(response.ticker.price).toLocaleString()}</td>
         <td>${crypto.type}</td>
         <td>${Number(crypto.target).toLocaleString()}</td>
-        <td><a data-index="${index}" class="btn btn-danger btn-sm btnDelete">حذف</a></td>
+        <td>${crypto.targetReachTime}</td>
+        <td><a data-index="${index}" class="btn btn-danger btn-sm btnDelete">حذف</a> 
+        <a data-index="${index}" class="btn btn-primary btn-sm btnReset">ریست</a></td>
       `;
       trList.push(td.toString());
     }
@@ -43,9 +56,15 @@ async function fetchAndShow() {
     tr.innerHTML = trBody;
     resultBody.appendChild(tr);
     btnAddNotification.addEventListener("click", btnAddNotificationClick);
+
     let btnDeleteList = document.getElementsByClassName("btnDelete");
     Array.from(btnDeleteList).forEach((btn) => {
       btn.addEventListener("click", btnDeleteClick);
+    });
+
+    let btnResetList = document.getElementsByClassName("btnReset");
+    Array.from(btnResetList).forEach((btn) => {
+      btn.addEventListener("click", btnResetClick);
     });
   }
 }
@@ -66,11 +85,12 @@ function btnAddNotificationClick() {
       currency: txtCurrency.value,
       target: txtTargetPrice.value,
       type: selectTargetPriceType.value,
+      isNotificationShowed: false,
+      targetReachTime: "",
     });
 
     chrome.storage.local.set({ notificationList: notifyList });
 
-    txtCurrency.value = "";
     txtTargetPrice.value = "";
     selectTargetPriceType.value = "";
   }
@@ -88,15 +108,14 @@ function btnStartClick(event) {
     type: "basic",
   });
 
-  background.setBadge("Work")
+  background.setBadge("Work");
 
   event.target.disabled = true;
   btnStop.disabled = false;
 }
 
 function btnStopClick(event) {
-  clearInterval(background.timer)
-  background.timer=null
+  background.stopTimer();
 
   background.notify({
     title: `Stop`,
@@ -105,7 +124,7 @@ function btnStopClick(event) {
     type: "basic",
   });
 
-  background.setBadge("")
+  background.setBadge("");
 
   event.target.disabled = true;
   btnStart.disabled = false;
