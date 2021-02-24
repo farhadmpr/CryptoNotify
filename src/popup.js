@@ -35,9 +35,9 @@ async function fetchAndShow() {
   for (const [index, crypto] of notifyList.entries()) {
     let response = await fetch(
       `https://api.cryptonator.com/api/ticker/${crypto.currency}`
-    );    
+    );
     if (response.ok) {
-      response = await response.json();      
+      response = await response.json();
       let td = `
         <td>${crypto.currency.toUpperCase()}</td>
         <td>${Number(response?.ticker?.price).toLocaleString()}</td>
@@ -133,6 +133,17 @@ function btnStopClick(event) {
 btnAddNotification.addEventListener("click", btnAddNotificationClick);
 btnStart.addEventListener("click", btnStartClick);
 btnStop.addEventListener("click", btnStopClick);
+
+if (background.timer) {
+  btnStart.disabled = true;
+  btnStop.disabled = false;
+  background.setBadge("Work");
+}
+else{
+  btnStart.disabled = false;
+  btnStop.disabled = true;
+  background.setBadge("");
+}
 
 chrome.storage.local.get(["notificationList"], async function (result) {
   if (result.notificationList) {
